@@ -185,18 +185,41 @@ symbols = {
     HUMAN: "⚫",
     AI: "⚪"
 }
+symbols = {
+    EMPTY: "🟩",
+    HUMAN: "⚫",
+    AI: "⚪"
+}
 
 st.write("### 盤面")
+
+moves = game.valid_moves(HUMAN)
 
 for r in range(8):
     cols = st.columns(8)
 
     for c in range(8):
         with cols[c]:
-            st.button(
-                symbols[game.board[r][c]],
-                key=f"cell_{r}_{c}"
-            )
+
+            label = symbols[game.board[r][c]]
+
+            # 置ける場所を少し分かりやすくする
+            if game.board[r][c] == EMPTY and (r, c) in moves:
+                label = "🟢"
+
+            if st.button(label, key=f"cell_{r}_{c}"):
+
+                # 置ける場所を押したら石を置く
+                if (r, c) in moves:
+                    game.make_move(r, c, HUMAN)
+
+                    ai_moves = game.valid_moves(AI)
+
+                    if ai_moves:
+                        _, move = minimax(game, 5, True)
+                        game.make_move(move[0], move[1], AI)
+
+                    st.rerun()
 
 human_score, ai_score = game.score()
 st.write(f"あなた(■)：{human_score}")
@@ -217,21 +240,7 @@ else:
 
     st.write("置ける場所:", moves)
 
-    r = st.number_input(
-        "行",
-        min_value=0,
-        max_value=7,
-        step=1
-    )
-
-    c = st.number_input(
-        "列",
-        min_value=0,
-        max_value=7,
-        step=1
-    )
-
-    if st.button("置く"):
+   
         if (r, c) in moves:
             game.make_move(int(r), int(c), HUMAN)
 
