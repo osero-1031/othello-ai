@@ -180,11 +180,7 @@ if "game" not in st.session_state:
 
 game = st.session_state.game
 
-symbols = {
-    EMPTY: "🟩",
-    HUMAN: "⚫",
-    AI: "⚪"
-}
+
 symbols = {
     EMPTY: "🟩",
     HUMAN: "⚫",
@@ -235,25 +231,7 @@ if game.game_over():
     else:
         st.success("引き分け！")
 
-else:
-    moves = game.valid_moves(HUMAN)
 
-    st.write("置ける場所:", moves)
-
-   
-        if (r, c) in moves:
-            game.make_move(int(r), int(c), HUMAN)
-
-            ai_moves = game.valid_moves(AI)
-
-            if ai_moves:
-                _, move = minimax(game, 5, True)
-                game.make_move(move[0], move[1], AI)
-
-            st.rerun()
-
-        else:
-            st.error("そこには置けません！")
 
 if st.button("最初から"):
     st.session_state.game = Othello()
