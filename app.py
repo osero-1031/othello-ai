@@ -180,8 +180,6 @@ if "game" not in st.session_state:
 
 game = st.session_state.game
 
-st.write("### 盤面")
-
 symbols = {
     EMPTY: "🟩",
     HUMAN: "⚫",
