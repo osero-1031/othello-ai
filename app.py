@@ -182,8 +182,23 @@ game = st.session_state.game
 
 st.write("### 盤面")
 
-for i, row in enumerate(game.board):
-    st.write(f"{i} : " + " ".join(row))
+symbols = {
+    EMPTY: "🟩",
+    HUMAN: "⚫",
+    AI: "⚪"
+}
+
+st.write("### 盤面")
+
+for r in range(8):
+    cols = st.columns(8)
+
+    for c in range(8):
+        with cols[c]:
+            st.button(
+                symbols[game.board[r][c]],
+                key=f"cell_{r}_{c}"
+            )
 
 human_score, ai_score = game.score()
 st.write(f"あなた(■)：{human_score}")
