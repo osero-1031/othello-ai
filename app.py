@@ -171,9 +171,9 @@ def get_depth(difficulty):
     elif difficulty == "ふつう":
         return 3
     elif difficulty == "むずかしい":
-        return 5
+        return 4
     else:
-        return 7
+        return 5
 
 
 st.title("♟️ オセロAI")
