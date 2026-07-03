@@ -27,7 +27,6 @@ WEIGHTS = [
 class Othello:
     def __init__(self):
         self.board = [[EMPTY for _ in range(8)] for _ in range(8)]
-
         self.board[3][3] = AI
         self.board[3][4] = HUMAN
         self.board[4][3] = HUMAN
@@ -109,7 +108,6 @@ class Othello:
         ai = sum(row.count(AI) for row in self.board)
         return human, ai
 
-
 def evaluate(game):
     score = 0
 
@@ -176,18 +174,53 @@ def get_depth(difficulty):
     else:
         return 5
 
-
 st.title("♟️ オセロAI")
 
-difficulty = st.selectbox(
-    "難易度を選んでください",
-    ["かんたん", "ふつう", "むずかしい", "さいきょう"]
-)
-
+# 初期設定
 if "game" not in st.session_state:
     st.session_state.game = Othello()
 
+if "started" not in st.session_state:
+    st.session_state.started = False
+
+if "human_turn" not in st.session_state:
+    st.session_state.human_turn = True
+
 game = st.session_state.game
+
+# ゲーム開始前の画面
+if not st.session_state.started:
+
+    difficulty = st.selectbox(
+        "難易度を選んでください",
+        ["かんたん", "ふつう", "むずかしい", "さいきょう"]
+    )
+
+    order = st.radio(
+        "先攻・後攻を選んでください",
+        ["先攻", "後攻"]
+    )
+
+    if st.button("ゲーム開始"):
+        st.session_state.difficulty = difficulty
+        st.session_state.human_turn = (order == "先攻")
+        st.session_state.started = True
+
+        # 後攻なら最初にAIが打つ
+        if not st.session_state.human_turn:
+            depth = get_depth(difficulty)
+            _, move = minimax(game, depth, True)
+
+            if move is not None:
+                game.make_move(move[0], move[1], AI)
+
+            st.session_state.human_turn = True
+
+        st.rerun()
+
+    st.stop()
+
+difficulty = st.session_state.difficulty
 
 symbols = {
     EMPTY: "🟩",
@@ -204,26 +237,38 @@ for r in range(8):
 
     for c in range(8):
         with cols[c]:
+
             label = symbols[game.board[r][c]]
 
-            if game.board[r][c] == EMPTY and (r, c) in moves:
+            if (
+                game.board[r][c] == EMPTY
+                and (r, c) in moves
+                and st.session_state.human_turn
+            ):
                 label = "🟢"
 
             if st.button(label, key=f"cell_{r}_{c}"):
 
-                if (r, c) in moves:
+                if (
+                    st.session_state.human_turn
+                    and (r, c) in moves
+                ):
                     game.make_move(r, c, HUMAN)
+                    st.session_state.human_turn = False
 
                     ai_moves = game.valid_moves(AI)
 
                     if ai_moves:
-    time.sleep(1)  # 1秒待つ
+                        st.write("🤖 AI考え中...")
+                        time.sleep(1)
 
-    depth = get_depth(difficulty)
-    _, move = minimax(game, depth, True)
+                        depth = get_depth(difficulty)
+                        _, move = minimax(game, depth, True)
 
-    if move is not None:
-        game.make_move(move[0], move[1], AI)
+                        if move is not None:
+                            game.make_move(move[0], move[1], AI)
+
+                    st.session_state.human_turn = True
                     st.rerun()
 
 human_score, ai_score = game.score()
@@ -243,4 +288,6 @@ if game.game_over():
 
 if st.button("最初から"):
     st.session_state.game = Othello()
+    st.session_state.started = False
+    st.session_state.human_turn = True
     st.rerun()
