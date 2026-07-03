@@ -216,7 +216,7 @@ for r in range(8):
 
                     ai_moves = game.valid_moves(AI)
 
-                    if ai_moves:
+if ai_moves:
 
     if difficulty == "かんたん":
         depth = 2
