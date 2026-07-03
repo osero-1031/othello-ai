@@ -172,7 +172,7 @@ def get_depth(difficulty):
         return 3
     elif difficulty == "むずかしい":
         return 5
-    else:difficulty == "AI":
+    else:
         return 7
 
 
