@@ -1,5 +1,6 @@
 import streamlit as st
 import copy
+import time
 
 EMPTY = "×"
 HUMAN = "■"
@@ -216,12 +217,13 @@ for r in range(8):
                     ai_moves = game.valid_moves(AI)
 
                     if ai_moves:
-                        depth = get_depth(difficulty)
-                        _, move = minimax(game, depth, True)
+    time.sleep(1)  # 1秒待つ
 
-                        if move is not None:
-                            game.make_move(move[0], move[1], AI)
+    depth = get_depth(difficulty)
+    _, move = minimax(game, depth, True)
 
+    if move is not None:
+        game.make_move(move[0], move[1], AI)
                     st.rerun()
 
 human_score, ai_score = game.score()
