@@ -175,6 +175,11 @@ def minimax(game, depth, maximizing):
 
 st.title("♟️ オセロAI")
 
+difficulty = st.selectbox(
+    "難易度を選んでください",
+    ["かんたん", "ふつう", "むずかしい", "さいきょう"]
+)
+
 if "game" not in st.session_state:
     st.session_state.game = Othello()
 
@@ -212,7 +217,16 @@ for r in range(8):
                     ai_moves = game.valid_moves(AI)
 
                     if ai_moves:
-                        _, move = minimax(game, 5, True)
+                       if difficulty == "かんたん":
+    depth = 2
+elif difficulty == "ふつう":
+    depth = 4
+elif difficulty == "むずかしい":
+    depth = 5
+else:
+    depth = 7
+
+_, move = minimax(game, depth, True)
                         game.make_move(move[0], move[1], AI)
 
                     st.rerun()
