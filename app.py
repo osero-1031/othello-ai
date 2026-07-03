@@ -210,26 +210,27 @@ for r in range(8):
 
             if st.button(label, key=f"cell_{r}_{c}"):
 
-                # 置ける場所を押したら石を置く
-                if (r, c) in moves:
-                    game.make_move(r, c, HUMAN)
+if (r, c) in moves:
+    game.make_move(r, c, HUMAN)
 
-                    ai_moves = game.valid_moves(AI)
+    ai_moves = game.valid_moves(AI)
 
-if ai_moves:
+    if ai_moves:
 
-    if difficulty == "かんたん":
-        depth = 2
-    elif difficulty == "ふつう":
-        depth = 4
-    elif difficulty == "むずかしい":
-        depth = 5
-    else:
-        depth = 7
+        if difficulty == "かんたん":
+            depth = 2
+        elif difficulty == "ふつう":
+            depth = 4
+        elif difficulty == "むずかしい":
+            depth = 5
+        else:
+            depth = 7
 
-    _, move = minimax(game, depth, True)
-    game.make_move(move[0], move[1], AI)
-                    st.rerun()
+        _, move = minimax(game, depth, True)
+        game.make_move(move[0], move[1], AI)
+
+    st.rerun()
+               
 
 human_score, ai_score = game.score()
 st.write(f"あなた(■)：{human_score}")
