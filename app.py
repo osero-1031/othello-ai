@@ -141,11 +141,7 @@ def minimax(game, depth, maximizing):
             new_game = copy.deepcopy(game)
             new_game.make_move(move[0], move[1], AI)
 
-            score, _ = minimax(
-                new_game,
-                depth - 1,
-                False
-            )
+            score, _ = minimax(new_game, depth - 1, False)
 
             if score > best_score:
                 best_score = score
@@ -160,17 +156,24 @@ def minimax(game, depth, maximizing):
             new_game = copy.deepcopy(game)
             new_game.make_move(move[0], move[1], HUMAN)
 
-            score, _ = minimax(
-                new_game,
-                depth - 1,
-                True
-            )
+            score, _ = minimax(new_game, depth - 1, True)
 
             if score < best_score:
                 best_score = score
                 best_move = move
 
         return best_score, best_move
+
+
+def get_depth(difficulty):
+    if difficulty == "かんたん":
+        return 2
+    elif difficulty == "ふつう":
+        return 4
+    elif difficulty == "むずかしい":
+        return 5
+    else:
+        return 7
 
 
 st.title("♟️ オセロAI")
@@ -184,7 +187,6 @@ if "game" not in st.session_state:
     st.session_state.game = Othello()
 
 game = st.session_state.game
-
 
 symbols = {
     EMPTY: "🟩",
@@ -201,52 +203,41 @@ for r in range(8):
 
     for c in range(8):
         with cols[c]:
-
             label = symbols[game.board[r][c]]
 
-            # 置ける場所を少し分かりやすくする
             if game.board[r][c] == EMPTY and (r, c) in moves:
                 label = "🟢"
 
             if st.button(label, key=f"cell_{r}_{c}"):
 
-if (r, c) in moves:
-    game.make_move(r, c, HUMAN)
+                if (r, c) in moves:
+                    game.make_move(r, c, HUMAN)
 
-    ai_moves = game.valid_moves(AI)
+                    ai_moves = game.valid_moves(AI)
 
-    if ai_moves:
+                    if ai_moves:
+                        depth = get_depth(difficulty)
+                        _, move = minimax(game, depth, True)
 
-        if difficulty == "かんたん":
-            depth = 2
-        elif difficulty == "ふつう":
-            depth = 4
-        elif difficulty == "むずかしい":
-            depth = 5
-        else:
-            depth = 7
+                        if move is not None:
+                            game.make_move(move[0], move[1], AI)
 
-        _, move = minimax(game, depth, True)
-        game.make_move(move[0], move[1], AI)
-
-    st.rerun()
-               
+                    st.rerun()
 
 human_score, ai_score = game.score()
-st.write(f"あなた(■)：{human_score}")
-st.write(f"AI(□)：{ai_score}")
+
+st.write(f"あなた（⚫）：{human_score}")
+st.write(f"AI（⚪）：{ai_score}")
 
 if game.game_over():
     st.success("ゲーム終了！")
 
     if human_score > ai_score:
-        st.success("あなたの勝ち！")
+        st.success("🎉 あなたの勝ち！")
     elif ai_score > human_score:
-        st.success("AIの勝ち！")
+        st.success("🤖 AIの勝ち！")
     else:
-        st.success("引き分け！")
-
-
+        st.success("🤝 引き分け！")
 
 if st.button("最初から"):
     st.session_state.game = Othello()
