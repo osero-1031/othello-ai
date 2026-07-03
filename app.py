@@ -167,12 +167,12 @@ def minimax(game, depth, maximizing):
 
 def get_depth(difficulty):
     if difficulty == "かんたん":
-        return 2
+        return 1
     elif difficulty == "ふつう":
-        return 4
+        return 3
     elif difficulty == "むずかしい":
         return 5
-    else:
+    else:difficulty == "AI":
         return 7
 
 
