@@ -102,12 +102,13 @@ class Othello:
             and len(self.valid_moves(AI)) == 0
         )
 
-    def score(self):
-        human = sum(row.count(HUMAN) for row in self.board)
-        ai = sum(row.count(AI) for row in self.board)
-        return human, ai
-        
-    def evaluate(game):
+  def score(self):
+    human = sum(row.count(HUMAN) for row in self.board)
+    ai = sum(row.count(AI) for row in self.board)
+    return human, ai
+
+
+def evaluate(game):
     score = 0
 
     for r in range(8):
