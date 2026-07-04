@@ -259,21 +259,21 @@ for r in range(8):
 
                     ai_moves = game.valid_moves(AI)
 
-                    if ai_moves:
-                        st.write("🤖 AI考え中...")
-                        time.sleep(1)
+if ai_moves:
+    st.write("🤖 AI考え中...")
+    time.sleep(1)
 
-                      if difficulty == "よわよわ":
-                        
-                     move = ai_moves[0]
-　　　　　　　　　　　　　else:
-　　　　　　　　　　　　    depth = get_depth(difficulty)
-　　　　　　　　　　　　    _, move = minimax(game, depth, True)
-                        if move is not None:
-                            game.make_move(move[0], move[1], AI)
+    if difficulty == "よわよわ":
+        move = ai_moves[0]
+    else:
+        depth = get_depth(difficulty)
+        _, move = minimax(game, depth, True)
 
-                    st.session_state.human_turn = True
-                    st.rerun()
+    if move is not None:
+        game.make_move(move[0], move[1], AI)
+
+st.session_state.human_turn = True
+st.rerun()
 
 human_score, ai_score = game.score()
 
