@@ -263,12 +263,12 @@ for r in range(8):
                         st.write("🤖 AI考え中...")
                         time.sleep(1)
 
-                        if difficulty == "よわよわ":
-    move = ai_moves[0]
-else:
-    depth = get_depth(difficulty)
-    _, move = minimax(game, depth, True)
-
+                      if difficulty == "よわよわ":
+                        
+                     move = ai_moves[0]
+　　　　　　　　　　　　　else:
+　　　　　　　　　　　　    depth = get_depth(difficulty)
+　　　　　　　　　　　　    _, move = minimax(game, depth, True)
                         if move is not None:
                             game.make_move(move[0], move[1], AI)
 
