@@ -320,6 +320,25 @@ st.write(f"AI（⚪）：{ai_score}")
 st.write(f"🏆 最高得点：{st.session_state.best_score}点")
 st.write(f"🔥 最大連勝：{st.session_state.max_win_streak}")
 st.write(f"🎮 プレイ回数：{st.session_state.play_count}回")
+st.write("## 🏅 実績")
+
+st.write(
+    "🏆 初勝利！"
+    if st.session_state.first_win
+    else "🔒 初勝利！"
+)
+
+st.write(
+    "🔥 10連勝達成！"
+    if st.session_state.ten_wins
+    else "🔒 10連勝達成！"
+)
+
+st.write(
+    "🎮 100回プレイ！"
+    if st.session_state.hundred_games
+    else "🔒 100回プレイ！"
+)
 
 if game.game_over():
     st.success("ゲーム終了！")
@@ -327,6 +346,15 @@ if game.game_over():
     # 1回だけ記録する
     if not st.session_state.result_saved:
         st.session_state.play_count += 1
+        st.session_state.play_count += 1
+
+if (
+    st.session_state.play_count >= 100
+    and not st.session_state.hundred_games
+):
+    st.session_state.hundred_games = True
+    st.balloons()
+    st.success("🏆 実績解除！『100回プレイ！』")
 
         if human_score > ai_score:
             st.success("🎉 あなたの勝ち！")
