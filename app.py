@@ -342,13 +342,6 @@ if game.game_over():
 
         st.session_state.result_saved = True
 
-    if human_score > ai_score:
-        st.success("🎉 あなたの勝ち！")
-    elif ai_score > human_score:
-        st.success("🤖 AIの勝ち！")
-    else:
-        st.success("🤝 引き分け！")
-
 if st.button("最初から"):
     st.session_state.game = Othello()
     st.session_state.started = False
