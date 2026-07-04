@@ -198,6 +198,15 @@ if "human_turn" not in st.session_state:
 
 game = st.session_state.game
 
+if "first_win" not in st.session_state:
+    st.session_state.first_win = False
+
+if "ten_wins" not in st.session_state:
+    st.session_state.ten_wins = False
+
+if "hundred_games" not in st.session_state:
+    st.session_state.hundred_games = False
+
 if "best_score" not in st.session_state:
     st.session_state.best_score = 0
 
