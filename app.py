@@ -106,7 +106,8 @@ class Othello:
         human = sum(row.count(HUMAN) for row in self.board)
         ai = sum(row.count(AI) for row in self.board)
         return human, ai
-        def evaluate(game):
+        
+    def evaluate(game):
     score = 0
 
     for r in range(8):
