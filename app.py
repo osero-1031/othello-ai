@@ -346,4 +346,5 @@ if st.button("最初から"):
     st.session_state.game = Othello()
     st.session_state.started = False
     st.session_state.human_turn = True
+    st.session_state.result_saved = False
     st.rerun()
