@@ -340,48 +340,60 @@ st.write(
     else "🔒 100回プレイ！"
 )
 
-if game.game_over():
-    st.success("ゲーム終了！")
+if not st.session_state.result_saved:
+    st.session_state.play_count += 1
 
-    # 1回だけ記録する
-    if not st.session_state.result_saved:
-        st.session_state.play_count += 1
-        st.session_state.play_count += 1
-
-     if (
+    # 100回プレイ実績
+    if (
         st.session_state.play_count >= 100
         and not st.session_state.hundred_games
-        ):
+    ):
         st.session_state.hundred_games = True
         st.balloons()
         st.success("🏆 実績解除！『100回プレイ！』")
 
-        if human_score > ai_score:
-            st.success("🎉 あなたの勝ち！")
+    if human_score > ai_score:
+        st.success("🎉 あなたの勝ち！")
 
-            st.session_state.win_streak += 1
+        st.session_state.win_streak += 1
 
-            if human_score > st.session_state.best_score:
-                st.session_state.best_score = human_score
+        # 初勝利
+        if not st.session_state.first_win:
+            st.session_state.first_win = True
+            st.balloons()
+            st.success("🏆 実績解除！『初勝利！』")
 
-            if (
+        # 最高得点更新
+        if human_score > st.session_state.best_score:
+            st.session_state.best_score = human_score
+
+        # 最大連勝更新
+        if (
+            st.session_state.win_streak
+            > st.session_state.max_win_streak
+        ):
+            st.session_state.max_win_streak = (
                 st.session_state.win_streak
-                > st.session_state.max_win_streak
-            ):
-                st.session_state.max_win_streak = (
-                    st.session_state.win_streak
-                )
+            )
 
-        elif ai_score > human_score:
-            st.success("🤖 AIの勝ち！")
-            st.session_state.win_streak = 0
+        # 10連勝実績
+        if (
+            st.session_state.max_win_streak >= 10
+            and not st.session_state.ten_wins
+        ):
+            st.session_state.ten_wins = True
+            st.balloons()
+            st.success("🏆 実績解除！『10連勝達成！』")
 
-        else:
-            st.success("🤝 引き分け！")
-            st.session_state.win_streak = 0
+    elif ai_score > human_score:
+        st.success("🤖 AIの勝ち！")
+        st.session_state.win_streak = 0
 
-        st.session_state.result_saved = True
+    else:
+        st.success("🤝 引き分け！")
+        st.session_state.win_streak = 0
 
+    st.session_state.result_saved = True
 if st.button("最初から"):
     st.session_state.game = Othello()
     st.session_state.started = False
