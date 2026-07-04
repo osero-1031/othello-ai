@@ -181,7 +181,8 @@ def get_depth(difficulty):
         return 4
     else:
         return 5
-        st.title("♟️ オセロAI")
+        
+st.title("♟️ オセロAI")
 
 # 初期設定
 if "game" not in st.session_state:
