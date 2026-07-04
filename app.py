@@ -198,6 +198,21 @@ if "human_turn" not in st.session_state:
 
 game = st.session_state.game
 
+if "best_score" not in st.session_state:
+    st.session_state.best_score = 0
+
+if "win_streak" not in st.session_state:
+    st.session_state.win_streak = 0
+
+if "max_win_streak" not in st.session_state:
+    st.session_state.max_win_streak = 0
+
+if "play_count" not in st.session_state:
+    st.session_state.play_count = 0
+
+if "result_saved" not in st.session_state:
+    st.session_state.result_saved = False
+    
 # ゲーム開始前の画面
 if not st.session_state.started:
 
@@ -296,6 +311,36 @@ st.write(f"AI（⚪）：{ai_score}")
 
 if game.game_over():
     st.success("ゲーム終了！")
+
+    # 1回だけ記録する
+    if not st.session_state.result_saved:
+        st.session_state.play_count += 1
+
+        if human_score > ai_score:
+            st.success("🎉 あなたの勝ち！")
+
+            st.session_state.win_streak += 1
+
+            if human_score > st.session_state.best_score:
+                st.session_state.best_score = human_score
+
+            if (
+                st.session_state.win_streak
+                > st.session_state.max_win_streak
+            ):
+                st.session_state.max_win_streak = (
+                    st.session_state.win_streak
+                )
+
+        elif ai_score > human_score:
+            st.success("🤖 AIの勝ち！")
+            st.session_state.win_streak = 0
+
+        else:
+            st.success("🤝 引き分け！")
+            st.session_state.win_streak = 0
+
+        st.session_state.result_saved = True
 
     if human_score > ai_score:
         st.success("🎉 あなたの勝ち！")
