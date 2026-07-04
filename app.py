@@ -308,6 +308,9 @@ human_score, ai_score = game.score()
 
 st.write(f"あなた（⚫）：{human_score}")
 st.write(f"AI（⚪）：{ai_score}")
+st.write(f"🏆 最高得点：{st.session_state.best_score}点")
+st.write(f"🔥 最大連勝：{st.session_state.max_win_streak}")
+st.write(f"🎮 プレイ回数：{st.session_state.play_count}回")
 
 if game.game_over():
     st.success("ゲーム終了！")
