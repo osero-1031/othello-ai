@@ -250,34 +250,30 @@ for r in range(8):
 
             if st.button(label, key=f"cell_{r}_{c}"):
 
-               if (
-    st.session_state.human_turn
-    and (r, c) in moves
-):
-    game.make_move(r, c, HUMAN)
-    st.session_state.human_turn = False
+    if (
+        st.session_state.human_turn
+        and (r, c) in moves
+    ):
+        game.make_move(r, c, HUMAN)
+        st.session_state.human_turn = False
 
-    ai_moves = game.valid_moves(AI)
+        ai_moves = game.valid_moves(AI)
 
-    if ai_moves:
-        st.write("🤖 AI考え中...")
-        time.sleep(1)
+        if ai_moves:
+            st.write("🤖 AI考え中...")
+            time.sleep(1)
 
-        if difficulty == "よわよわ":
-            move = ai_moves[0]
-        else:
-            ai_moves = game.valid_moves(AI)
+            if difficulty == "よわよわ":
+                move = ai_moves[0]
+            else:
+                depth = get_depth(difficulty)
+                _, move = minimax(game, depth, True)
 
-if difficulty == "よわよわ":
-    move = ai_moves[0]
-else:
-    depth = get_depth(difficulty)
-    _, move = minimax(game, depth, True)
-        if move is not None:
-            game.make_move(move[0], move[1], AI)
+            if move is not None:
+                game.make_move(move[0], move[1], AI)
 
-    st.session_state.human_turn = True
-    st.rerun()
+        st.session_state.human_turn = True
+        st.rerun()
     
 human_score, ai_score = game.score()
 
