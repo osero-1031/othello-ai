@@ -165,7 +165,9 @@ def minimax(game, depth, maximizing):
 
 
 def get_depth(difficulty):
-    if difficulty == "かんたん":
+    if difficulty == "よわよわ":
+        return 0
+    elif difficulty == "かんたん":
         return 1
     elif difficulty == "ふつう":
         return 3
@@ -173,7 +175,6 @@ def get_depth(difficulty):
         return 4
     else:
         return 5
-
 st.title("♟️ オセロAI")
 
 # 初期設定
@@ -193,7 +194,7 @@ if not st.session_state.started:
 
     difficulty = st.selectbox(
         "難易度を選んでください",
-        ["かんたん", "ふつう", "むずかしい", "さいきょう"]
+        ["よわよわ", "かんたん", "ふつう", "むずかしい", "さいきょう"]
     )
 
     order = st.radio(
@@ -262,8 +263,11 @@ for r in range(8):
                         st.write("🤖 AI考え中...")
                         time.sleep(1)
 
-                        depth = get_depth(difficulty)
-                        _, move = minimax(game, depth, True)
+                        if difficulty == "よわよわ":
+    move = ai_moves[0]
+else:
+    depth = get_depth(difficulty)
+    _, move = minimax(game, depth, True)
 
                         if move is not None:
                             game.make_move(move[0], move[1], AI)
