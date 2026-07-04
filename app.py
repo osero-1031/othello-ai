@@ -1,6 +1,7 @@
 import streamlit as st
 import copy
 import time
+import random
 
 EMPTY = "×"
 HUMAN = "■"
@@ -22,8 +23,6 @@ WEIGHTS = [
     [-20, -50, -2, -2, -2, -2, -50, -20],
     [100, -20, 10, 5, 5, 10, -20, 100]
 ]
-
-
 class Othello:
     def __init__(self):
         self.board = [[EMPTY for _ in range(8)] for _ in range(8)]
@@ -107,8 +106,7 @@ class Othello:
         human = sum(row.count(HUMAN) for row in self.board)
         ai = sum(row.count(AI) for row in self.board)
         return human, ai
-
-def evaluate(game):
+        def evaluate(game):
     score = 0
 
     for r in range(8):
@@ -140,7 +138,11 @@ def minimax(game, depth, maximizing):
             new_game = copy.deepcopy(game)
             new_game.make_move(move[0], move[1], AI)
 
-            score, _ = minimax(new_game, depth - 1, False)
+            score, _ = minimax(
+                new_game,
+                depth - 1,
+                False
+            )
 
             if score > best_score:
                 best_score = score
@@ -155,7 +157,11 @@ def minimax(game, depth, maximizing):
             new_game = copy.deepcopy(game)
             new_game.make_move(move[0], move[1], HUMAN)
 
-            score, _ = minimax(new_game, depth - 1, True)
+            score, _ = minimax(
+                new_game,
+                depth - 1,
+                True
+            )
 
             if score < best_score:
                 best_score = score
@@ -175,7 +181,7 @@ def get_depth(difficulty):
         return 4
     else:
         return 5
-st.title("♟️ オセロAI")
+        st.title("♟️ オセロAI")
 
 # 初期設定
 if "game" not in st.session_state:
@@ -209,11 +215,17 @@ if not st.session_state.started:
 
         # 後攻なら最初にAIが打つ
         if not st.session_state.human_turn:
-            depth = get_depth(difficulty)
-            _, move = minimax(game, depth, True)
+            ai_moves = game.valid_moves(AI)
 
-            if move is not None:
-                game.make_move(move[0], move[1], AI)
+            if ai_moves:
+                if difficulty == "よわよわ":
+                    move = random.choice(ai_moves)
+                else:
+                    depth = get_depth(difficulty)
+                    _, move = minimax(game, depth, True)
+
+                if move is not None:
+                    game.make_move(move[0], move[1], AI)
 
             st.session_state.human_turn = True
 
@@ -228,70 +240,3 @@ symbols = {
     HUMAN: "⚫",
     AI: "⚪"
 }
-
-st.write("### 盤面")
-
-moves = game.valid_moves(HUMAN)
-
-for r in range(8):
-    cols = st.columns(8)
-
-    for c in range(8):
-        with cols[c]:
-
-            label = symbols[game.board[r][c]]
-
-            if (
-                game.board[r][c] == EMPTY
-                and (r, c) in moves
-                and st.session_state.human_turn
-            ):
-                label = "🟢"
-
-            if st.button(label, key=f"cell_{r}_{c}"):
-
-    if (
-        st.session_state.human_turn
-        and (r, c) in moves
-    ):
-        game.make_move(r, c, HUMAN)
-        st.session_state.human_turn = False
-
-        ai_moves = game.valid_moves(AI)
-
-        if ai_moves:
-            st.write("🤖 AI考え中...")
-            time.sleep(1)
-
-            if difficulty == "よわよわ":
-                move = ai_moves[0]
-            else:
-                depth = get_depth(difficulty)
-                _, move = minimax(game, depth, True)
-
-            if move is not None:
-                game.make_move(move[0], move[1], AI)
-
-        st.session_state.human_turn = True
-        st.rerun()
-    
-human_score, ai_score = game.score()
-
-st.write(f"あなた（⚫）：{human_score}")
-st.write(f"AI（⚪）：{ai_score}")
-
-if game.game_over():
-    st.success("ゲーム終了！")
-
-    if human_score > ai_score:
-        st.success("🎉 あなたの勝ち！")
-    elif ai_score > human_score:
-        st.success("🤖 AIの勝ち！")
-    else:
-        st.success("🤝 引き分け！")
-
-if st.button("最初から"):
-    st.session_state.game = Othello()
-    st.session_state.started = False
-    st.session_state.human_turn = True
-    st.rerun()
