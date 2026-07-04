@@ -96,7 +96,7 @@ class Othello:
                 for fr, fc in to_flip:
                     self.board[fr][fc] = player
 
-    def game_over(self):
+def game_over(self):
         return (
             len(self.valid_moves(HUMAN)) == 0
             and len(self.valid_moves(AI)) == 0
