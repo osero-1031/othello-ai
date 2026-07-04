@@ -259,7 +259,7 @@ for r in range(8):
 
                     ai_moves = game.valid_moves(AI)
 
-if ai_moves:
+ai_moves = game.valid_moves(AI)
     st.write("🤖 AI考え中...")
     time.sleep(1)
 
