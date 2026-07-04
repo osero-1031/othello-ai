@@ -96,16 +96,16 @@ class Othello:
                 for fr, fc in to_flip:
                     self.board[fr][fc] = player
 
-     def game_over(self):
+    def game_over(self):
         return (
             len(self.valid_moves(HUMAN)) == 0
             and len(self.valid_moves(AI)) == 0
         )
 
-     def score(self):
-    human = sum(row.count(HUMAN) for row in self.board)
-    ai = sum(row.count(AI) for row in self.board)
-    return human, ai
+    def score(self):
+        human = sum(row.count(HUMAN) for row in self.board
+        ai = sum(row.count(AI) for row in self.board)
+        return human, ai
 
 
 def evaluate(game):
