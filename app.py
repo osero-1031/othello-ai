@@ -240,3 +240,69 @@ symbols = {
     HUMAN: "⚫",
     AI: "⚪"
 }
+st.write("### 盤面")
+
+moves = game.valid_moves(HUMAN)
+
+for r in range(8):
+    cols = st.columns(8)
+
+    for c in range(8):
+        with cols[c]:
+
+            label = symbols[game.board[r][c]]
+
+            if (
+                game.board[r][c] == EMPTY
+                and (r, c) in moves
+                and st.session_state.human_turn
+            ):
+                label = "🟢"
+
+            if st.button(label, key=f"cell_{r}_{c}"):
+
+                if (
+                    st.session_state.human_turn
+                    and (r, c) in moves
+                ):
+                    game.make_move(r, c, HUMAN)
+                    st.session_state.human_turn = False
+
+                    ai_moves = game.valid_moves(AI)
+
+                    if ai_moves:
+                        st.write("🤖 AI考え中...")
+                        time.sleep(1)
+
+                        if difficulty == "よわよわ":
+                            move = random.choice(ai_moves)
+                        else:
+                            depth = get_depth(difficulty)
+                            _, move = minimax(game, depth, True)
+
+                        if move is not None:
+                            game.make_move(move[0], move[1], AI)
+
+                    st.session_state.human_turn = True
+                    st.rerun()
+
+human_score, ai_score = game.score()
+
+st.write(f"あなた（⚫）：{human_score}")
+st.write(f"AI（⚪）：{ai_score}")
+
+if game.game_over():
+    st.success("ゲーム終了！")
+
+    if human_score > ai_score:
+        st.success("🎉 あなたの勝ち！")
+    elif ai_score > human_score:
+        st.success("🤖 AIの勝ち！")
+    else:
+        st.success("🤝 引き分け！")
+
+if st.button("最初から"):
+    st.session_state.game = Othello()
+    st.session_state.started = False
+    st.session_state.human_turn = True
+    st.rerun()
