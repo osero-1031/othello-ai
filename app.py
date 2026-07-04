@@ -348,13 +348,13 @@ if game.game_over():
         st.session_state.play_count += 1
         st.session_state.play_count += 1
 
-if (
-    st.session_state.play_count >= 100
-    and not st.session_state.hundred_games
-):
-    st.session_state.hundred_games = True
-    st.balloons()
-    st.success("🏆 実績解除！『100回プレイ！』")
+     if (
+        st.session_state.play_count >= 100
+        and not st.session_state.hundred_games
+        ):
+        st.session_state.hundred_games = True
+        st.balloons()
+        st.success("🏆 実績解除！『100回プレイ！』")
 
         if human_score > ai_score:
             st.success("🎉 あなたの勝ち！")
