@@ -2,6 +2,7 @@ import streamlit as st
 import copy
 import time
 import random
+import base64
 
 EMPTY = "×"
 HUMAN = "■"
@@ -184,27 +185,25 @@ def get_depth(difficulty):
     else:
         return 5
 
-import base64
+def get_base64(file):
+    with open(file, "rb") as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
 
-def set_background():
-    with open("background.png", "rb") as f:
-        data = base64.b64encode(f.read()).decode()
+img = get_base64("background.png")
 
-    st.markdown(
-        f"""
-        <style>
-        .stApp {{
-            background-image: url("data:image/png;base64,{data}");
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }}
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+page_bg = f"""
+<style>
+[data-testid="stAppViewContainer"] {{
+    background-image: url("data:image/png;base64,{img}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}}
+</style>
+"""
 
-set_background()
+st.markdown(page_bg, unsafe_allow_html=True)
 st.title("♟️ オセロAI")
 
 # 初期設定
