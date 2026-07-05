@@ -183,7 +183,28 @@ def get_depth(difficulty):
         return 4
     else:
         return 5
-        
+
+import base64
+
+def set_background():
+    with open("background.png", "rb") as f:
+        data = base64.b64encode(f.read()).decode()
+
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("data:image/png;base64,{data}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+set_background()
 st.title("♟️ オセロAI")
 
 # 初期設定
