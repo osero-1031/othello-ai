@@ -398,7 +398,7 @@ if game.game_over():
         # 勝利
         if human_score > ai_score:
             st.success("🎉 あなたの勝ち！")
-
+            st.session_state.win_count += 1
             st.session_state.win_streak += 1
 
             # 初勝利
