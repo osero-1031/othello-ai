@@ -2,7 +2,6 @@ import streamlit as st
 import copy
 import time
 import random
-import base64
 
 EMPTY = "×"
 HUMAN = "■"
@@ -24,9 +23,12 @@ WEIGHTS = [
     [-20, -50, -2, -2, -2, -2, -50, -20],
     [100, -20, 10, 5, 5, 10, -20, 100]
 ]
+
+
 class Othello:
     def __init__(self):
         self.board = [[EMPTY for _ in range(8)] for _ in range(8)]
+
         self.board[3][3] = AI
         self.board[3][4] = HUMAN
         self.board[4][3] = HUMAN
@@ -107,8 +109,6 @@ class Othello:
         human = sum(row.count(HUMAN) for row in self.board)
         ai = sum(row.count(AI) for row in self.board)
         return human, ai
-
-
 def evaluate(game):
     score = 0
 
@@ -185,25 +185,7 @@ def get_depth(difficulty):
     else:
         return 5
 
-def get_base64(file):
-    with open(file, "rb") as f:
-        data = f.read()
-    return base64.b64encode(data).decode()
 
-img = get_base64("background.png")
-
-page_bg = f"""
-<style>
-[data-testid="stAppViewContainer"] {{
-    background-image: url("data:image/png;base64,{img}");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}}
-</style>
-"""
-
-st.markdown(page_bg, unsafe_allow_html=True)
 st.title("♟️ オセロAI")
 
 # 初期設定
@@ -215,17 +197,6 @@ if "started" not in st.session_state:
 
 if "human_turn" not in st.session_state:
     st.session_state.human_turn = True
-
-game = st.session_state.game
-
-if "first_win" not in st.session_state:
-    st.session_state.first_win = False
-
-if "ten_wins" not in st.session_state:
-    st.session_state.ten_wins = False
-
-if "hundred_games" not in st.session_state:
-    st.session_state.hundred_games = False
 
 if "best_score" not in st.session_state:
     st.session_state.best_score = 0
@@ -241,7 +212,17 @@ if "play_count" not in st.session_state:
 
 if "result_saved" not in st.session_state:
     st.session_state.result_saved = False
-    
+
+if "first_win" not in st.session_state:
+    st.session_state.first_win = False
+
+if "ten_wins" not in st.session_state:
+    st.session_state.ten_wins = False
+
+if "hundred_games" not in st.session_state:
+    st.session_state.hundred_games = False
+
+game = st.session_state.game
 # ゲーム開始前の画面
 if not st.session_state.started:
 
@@ -287,6 +268,7 @@ symbols = {
     HUMAN: "⚫",
     AI: "⚪"
 }
+
 st.write("### 盤面")
 
 moves = game.valid_moves(HUMAN)
@@ -337,9 +319,11 @@ human_score, ai_score = game.score()
 
 st.write(f"あなた（⚫）：{human_score}")
 st.write(f"AI（⚪）：{ai_score}")
+
 st.write(f"🏆 最高得点：{st.session_state.best_score}点")
 st.write(f"🔥 最大連勝：{st.session_state.max_win_streak}")
 st.write(f"🎮 プレイ回数：{st.session_state.play_count}回")
+
 st.write("## 🏅 実績")
 
 st.write(
@@ -360,61 +344,67 @@ st.write(
     else "🔒 100回プレイ！"
 )
 
-if not st.session_state.result_saved:
-    st.session_state.play_count += 1
+if game.game_over():
+    st.success("ゲーム終了！")
 
-    # 100回プレイ実績
-    if (
-        st.session_state.play_count >= 100
-        and not st.session_state.hundred_games
-    ):
-        st.session_state.hundred_games = True
-        st.balloons()
-        st.success("🏆 実績解除！『100回プレイ！』")
+    if not st.session_state.result_saved:
+        st.session_state.play_count += 1
 
-    if human_score > ai_score:
-    st.success("🎉 あなたの勝ち！")
+        # 100回プレイ
+        if (
+            st.session_state.play_count >= 100
+            and not st.session_state.hundred_games
+        ):
+            st.session_state.hundred_games = True
+            st.balloons()
+            st.success("🏆 実績解除！『100回プレイ！』")
 
-    st.session_state.win_streak += 1
+        # 勝利
+        if human_score > ai_score:
+            st.success("🎉 あなたの勝ち！")
 
-    # 初勝利
-    if not st.session_state.first_win:
-        st.session_state.first_win = True
-        st.balloons()
-        st.success("🏆 実績解除！『初勝利！』")
+            st.session_state.win_streak += 1
 
-    # 最高得点
-    if human_score > st.session_state.best_score:
-        st.session_state.best_score = human_score
+            # 初勝利
+            if not st.session_state.first_win:
+                st.session_state.first_win = True
+                st.balloons()
+                st.success("🏆 実績解除！『初勝利！』")
 
-    # 最大連勝更新
-    if (
-        st.session_state.win_streak
-        > st.session_state.max_win_streak
-    ):
-        st.session_state.max_win_streak = (
-            st.session_state.win_streak
-        )
+            # 最高得点
+            if human_score > st.session_state.best_score:
+                st.session_state.best_score = human_score
 
-    # 10連勝実績
-    if (
-        st.session_state.max_win_streak >= 10
-        and not st.session_state.ten_wins
-    ):
-        st.session_state.ten_wins = True
-        st.balloons()
-        st.success("🏆 実績解除！『10連勝達成！』")
-        st.success("🎉 あなたの勝ち！")
-        
-    elif ai_score > human_score:
-        st.success("🤖 AIの勝ち！")
-        st.session_state.win_streak = 0
+            # 最大連勝更新
+            if (
+                st.session_state.win_streak >
+                st.session_state.max_win_streak
+            ):
+                st.session_state.max_win_streak = (
+                    st.session_state.win_streak
+                )
 
-    else:
-        st.success("🤝 引き分け！")
-        st.session_state.win_streak = 0
+            # 10連勝
+            if (
+                st.session_state.max_win_streak >= 10
+                and not st.session_state.ten_wins
+            ):
+                st.session_state.ten_wins = True
+                st.balloons()
+                st.success("🏆 実績解除！『10連勝達成！』")
 
-    st.session_state.result_saved = True
+        # 負け
+        elif ai_score > human_score:
+            st.success("🤖 AIの勝ち！")
+            st.session_state.win_streak = 0
+
+        # 引き分け
+        else:
+            st.success("🤝 引き分け！")
+            st.session_state.win_streak = 0
+
+        st.session_state.result_saved = True
+
 if st.button("最初から"):
     st.session_state.game = Othello()
     st.session_state.started = False
