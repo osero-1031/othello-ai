@@ -404,6 +404,7 @@ if not st.session_state.result_saved:
         st.session_state.ten_wins = True
         st.balloons()
         st.success("🏆 実績解除！『10連勝達成！』")
+        st.success("🎉 あなたの勝ち！")
         
     elif ai_score > human_score:
         st.success("🤖 AIの勝ち！")
