@@ -373,38 +373,38 @@ if not st.session_state.result_saved:
         st.success("🏆 実績解除！『100回プレイ！』")
 
     if human_score > ai_score:
-        st.success("🎉 あなたの勝ち！")
+    st.success("🎉 あなたの勝ち！")
 
-        st.session_state.win_streak += 1
+    st.session_state.win_streak += 1
 
-        # 初勝利
-        if not st.session_state.first_win:
-            st.session_state.first_win = True
-            st.balloons()
-            st.success("🏆 実績解除！『初勝利！』")
+    # 初勝利
+    if not st.session_state.first_win:
+        st.session_state.first_win = True
+        st.balloons()
+        st.success("🏆 実績解除！『初勝利！』")
 
-        # 最高得点更新
-        if human_score > st.session_state.best_score:
-            st.session_state.best_score = human_score
+    # 最高得点
+    if human_score > st.session_state.best_score:
+        st.session_state.best_score = human_score
 
-        # 最大連勝更新
-        if (
+    # 最大連勝更新
+    if (
+        st.session_state.win_streak
+        > st.session_state.max_win_streak
+    ):
+        st.session_state.max_win_streak = (
             st.session_state.win_streak
-            > st.session_state.max_win_streak
-        ):
-            st.session_state.max_win_streak = (
-                st.session_state.win_streak
-            )
+        )
 
-        # 10連勝実績
-        if (
-            st.session_state.max_win_streak >= 10
-            and not st.session_state.ten_wins
-        ):
-            st.session_state.ten_wins = True
-            st.balloons()
-            st.success("🏆 実績解除！『10連勝達成！』")
-
+    # 10連勝実績
+    if (
+        st.session_state.max_win_streak >= 10
+        and not st.session_state.ten_wins
+    ):
+        st.session_state.ten_wins = True
+        st.balloons()
+        st.success("🏆 実績解除！『10連勝達成！』")
+        
     elif ai_score > human_score:
         st.success("🤖 AIの勝ち！")
         st.session_state.win_streak = 0
