@@ -1,5 +1,3 @@
-import json
-import os
 import streamlit as st
 import copy
 import time
@@ -187,37 +185,7 @@ def get_depth(difficulty):
     else:
         return 5
 
-SAVE_FILE = "save.json"
 
-
-def save_data():
-    data = {
-        "best_score": st.session_state.best_score,
-        "win_streak": st.session_state.win_streak,
-        "max_win_streak": st.session_state.max_win_streak,
-        "play_count": st.session_state.play_count,
-        "first_win": st.session_state.first_win,
-        "ten_wins": st.session_state.ten_wins,
-        "hundred_games": st.session_state.hundred_games
-    }
-
-    with open(SAVE_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f)
-
-
-def load_data():
-    if os.path.exists(SAVE_FILE):
-        with open(SAVE_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
-
-        st.session_state.best_score = data.get("best_score", 0)
-        st.session_state.win_streak = data.get("win_streak", 0)
-        st.session_state.max_win_streak = data.get("max_win_streak", 0)
-        st.session_state.play_count = data.get("play_count", 0)
-        st.session_state.first_win = data.get("first_win", False)
-        st.session_state.ten_wins = data.get("ten_wins", False)
-        st.session_state.hundred_games = data.get("hundred_games", False)
-        
 st.title("♟️ オセロAI")
 
 # 初期設定
@@ -253,10 +221,6 @@ if "ten_wins" not in st.session_state:
 
 if "hundred_games" not in st.session_state:
     st.session_state.hundred_games = False
-
-if "save_loaded" not in st.session_state:
-    load_data()
-    st.session_state.save_loaded = True
 
 game = st.session_state.game
 # ゲーム開始前の画面
@@ -398,7 +362,7 @@ if game.game_over():
         # 勝利
         if human_score > ai_score:
             st.success("🎉 あなたの勝ち！")
-            st.session_state.win_count += 1
+
             st.session_state.win_streak += 1
 
             # 初勝利
@@ -440,25 +404,10 @@ if game.game_over():
             st.session_state.win_streak = 0
 
         st.session_state.result_saved = True
-save_data()
 
 if st.button("最初から"):
     st.session_state.game = Othello()
     st.session_state.started = False
     st.session_state.human_turn = True
     st.session_state.result_saved = False
-    st.rerun()
-
-if st.button("🗑️ セーブデータ削除"):
-    if os.path.exists(SAVE_FILE):
-        os.remove(SAVE_FILE)
-
-    st.session_state.best_score = 0
-    st.session_state.win_streak = 0
-    st.session_state.max_win_streak = 0
-    st.session_state.play_count = 0
-    st.session_state.first_win = False
-    st.session_state.ten_wins = False
-    st.session_state.hundred_games = False
-
     st.rerun()
