@@ -419,7 +419,7 @@ def use_cheat_code(code):
         st.session_state.player_name = "プレイヤー"
 
         st.session_state.best_score = 0
-　
+        
         st.session_state.win_count = 0
 
         st.session_state.play_count = 0
