@@ -703,36 +703,6 @@ with st.expander("🔐 隠しコマンド"):
         st.rerun()
 
 # =========================
-# プレイヤー情報
-# =========================
-
-st.write("## 👤 プレイヤー情報")
-
-st.write(
-    f"👤 名前：{st.session_state.player_name}"
-)
-
-st.write(
-    f"🏆 ランク：{get_rank()}"
-)
-
-st.write(
-    f"🎮 プレイ回数：{st.session_state.play_count}回"
-)
-
-st.write(
-    f"🏆 勝利数：{st.session_state.win_count}"
-)
-
-st.write(
-    f"🔥 最大連勝：{st.session_state.max_win_streak}"
-)
-
-st.write(
-    f"⭐ 最高得点：{st.session_state.best_score}点"
-)
-
-# =========================
 # オセロ盤
 # =========================
 
