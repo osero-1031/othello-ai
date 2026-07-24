@@ -416,8 +416,33 @@ def use_cheat_code(code):
 
     elif code == "RESET":
 
-        return "⚠️ リセットはまだ使えません"
+        st.session_state.player_name = "プレイヤー"
 
+        st.session_state.best_score = 0
+　
+        st.session_state.win_count = 0
+
+        st.session_state.play_count = 0
+
+        st.session_state.win_streak = 0
+　　　　
+        st.session_state.max_win_streak = 0
+
+        st.session_state.first_win = False
+
+        st.session_state.ten_games = False
+
+        st.session_state.five_wins = False
+
+        st.session_state.ten_wins = False
+
+        st.session_state.hundred_games = False
+　　　　
+        st.session_state.rank_level = 0
+
+        save_data()
+
+        return "🔄 すべてのデータをリセットしました！"
 
     else:
 
