@@ -678,6 +678,8 @@ if not st.session_state.started:
 
     st.stop()
 
+difficulty = st.session_state.difficulty
+
 # =========================
 # チートコード
 # =========================
