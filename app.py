@@ -996,6 +996,38 @@ if game.game_over():
         # 保存済みにする
         st.session_state.result_saved = True
 
+st.write("## 🏅 実績")
+
+st.write(
+    "🏆 初勝利"
+    if st.session_state.first_win
+    else "🔒 初勝利"
+)
+
+st.write(
+    "🎮 10回プレイ"
+    if st.session_state.ten_games
+    else "🔒 10回プレイ"
+)
+
+st.write(
+    "🔥 5連勝"
+    if st.session_state.five_wins
+    else "🔒 5連勝"
+)
+
+st.write(
+    "🎮 100回プレイ"
+    if st.session_state.hundred_games
+    else "🔒 100回プレイ"
+)
+
+st.write(
+    "🔥 10連勝"
+    if st.session_state.ten_wins
+    else "🔒 10連勝"
+)
+
 # =========================
 # 最初から
 # =========================
