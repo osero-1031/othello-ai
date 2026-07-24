@@ -440,6 +440,20 @@ if "ten_wins" not in st.session_state:
         "ten_wins",
         False
     )
+    if "ten_games" not in st.session_state:
+
+    st.session_state.ten_games = saved_data.get(
+        "ten_games",
+        False
+    )
+
+
+if "five_wins" not in st.session_state:
+
+    st.session_state.five_wins = saved_data.get(
+        "five_wins",
+        False
+    )
 
 
 if "hundred_games" not in st.session_state:
