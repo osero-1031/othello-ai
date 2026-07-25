@@ -405,7 +405,7 @@ def use_cheat_code(code):
 
     elif code == "100GAMES":
 
-        st.session_state.play_count = 100
+        st.session_state.play_count = 99999
 
         st.session_state.hundred_games = True
 
