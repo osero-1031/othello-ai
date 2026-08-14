@@ -1306,7 +1306,7 @@ if game.game_over():
 
                 st.success(
 
-                    "⬆️ ランクアップ！ルーキー！"
+                    "⬆️ ランクアップ！"
 
                 )
 
@@ -1325,7 +1325,7 @@ if game.game_over():
 
                 st.success(
 
-                    "⬆️ ランクアップ！プロ！"
+                    "⬆️ ランクアップ！"
 
                 )
 
@@ -1344,7 +1344,7 @@ if game.game_over():
 
                 st.success(
 
-                    "⬆️ ランクアップ！マスター！"
+                    "⬆️ ランクアップ！"
 
                 )
 
@@ -1363,7 +1363,7 @@ if game.game_over():
 
                 st.success(
 
-                    "⬆️ ランクアップ！オセロ名人！"
+                    "⬆️ ランクアップ！"
 
                 )
 
@@ -1655,10 +1655,10 @@ for i, rank in enumerate(RANKS):
 st.write("## 📈 ランクアップ条件")
 
 
-st.write("初心者 → ルーキー：5勝")
+st.write("レベル1→ レベル2：5勝")
 
-st.write("ルーキー → プロ：15勝")
+st.write("レベル2 → レベル3：15勝")
 
-st.write("プロ → マスター：30勝")
+st.write("レベル3 → レベル4：30勝")
 
-st.write("マスター → オセロ名人：50勝")
+st.write("レベル4 → レベル5：50勝")
