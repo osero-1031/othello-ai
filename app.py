@@ -846,36 +846,6 @@ if not st.session_state.started:
     st.stop()
 
 
-# =========================
-# チートコード
-# =========================
-
-with st.expander("🔐 隠しコマンド"):
-
-
-    cheat_code = st.text_input(
-
-        "チートコードを入力してください",
-
-        type="password"
-
-    )
-
-
-    if st.button("チートコードを実行"):
-
-
-        result = use_cheat_code(
-
-            cheat_code.upper()
-
-        )
-
-
-        st.success(result)
-
-
-        st.rerun()
 
 
 # =========================
