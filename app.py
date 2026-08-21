@@ -1,3 +1,6 @@
+
+
+
 import streamlit as st
 import copy
 import time
@@ -349,6 +352,103 @@ def get_depth(difficulty):
 
         return 5
 
+# =========================
+# チートコード
+# =========================
+
+CHEAT_CODES = {
+
+    "WINNER": "次のゲームで勝利扱い",
+
+    "MAX": "最高得点を64点にする",
+
+    "RANKUP": "ランクアップ",
+
+    "100GAMES": "100回プレイ実績を解除",
+
+    "RESET": "データをリセット"
+
+}
+
+
+def use_cheat_code(code):
+
+    if code == "WINNER":
+
+        st.session_state.cheat_win = True
+
+        return "🏆 次のゲームで勝利扱いになります！"
+
+
+    elif code == "MAX":
+
+        st.session_state.best_score = 64
+
+        save_data()
+
+        return "🏆 最高得点が64点になりました！"
+
+
+    elif code == "RANKUP":
+
+        st.session_state.cheat_rankup = True
+
+        st.session_state.rank_level += 1
+
+
+        if st.session_state.rank_level > 4:
+
+            st.session_state.rank_level = 4
+
+
+        save_data()
+
+        return "⬆️ ランクアップしました！"
+
+
+    elif code == "MAXGAMES":
+
+        st.session_state.play_count = 999999999999999999999999999999999999999999999999999999999999999999999
+
+        st.session_state.hundred_games = True
+
+        save_data()
+
+        return "🎮 100回プレイ実績を解除しました！"
+
+
+    elif code == "RESET":
+        st.session_state.player_name = "プレイヤー"
+        
+        st.session_state.best_score = 0
+        
+        st.session_state.win_count = 0
+        
+        st.session_state.play_count = 0
+        
+        st.session_state.win_streak = 0
+        
+        st.session_state.max_win_streak = 0
+        
+        st.session_state.first_win = False
+        
+        st.session_state.ten_games = False
+        
+        st.session_state.five_wins = False
+        
+        st.session_state.ten_wins = False
+        
+        st.session_state.hundred_games = False
+        
+        st.session_state.rank_level = 0
+        
+        save_data()
+        
+        return "🔄 すべてのデータをリセットしました！"
+
+    else:
+
+        return "❌ チートコードが違います"
 
 
 # =========================
@@ -585,15 +685,15 @@ if "cheat_rankup" not in st.session_state:
 
 RANKS = [
 
-    "レベル1",
+    "初心者",
 
-    "レベル2",
+    "ルーキー",
 
-    "レベル3",
+    "プロ",
 
-    "レベル4",
+    "マスター",
 
-    "レベル5"
+    "オセロ名人"
 
 ]
 
@@ -846,6 +946,36 @@ if not st.session_state.started:
     st.stop()
 
 
+# =========================
+# チートコード
+# =========================
+
+with st.expander("🔐 隠しコマンド"):
+
+
+    cheat_code = st.text_input(
+
+        "チートコードを入力してください",
+
+        type="password"
+
+    )
+
+
+    if st.button("チートコードを実行"):
+
+
+        result = use_cheat_code(
+
+            cheat_code.upper()
+
+        )
+
+
+        st.success(result)
+
+
+        st.rerun()
 
 
 # =========================
@@ -1306,7 +1436,7 @@ if game.game_over():
 
                 st.success(
 
-                    "⬆️ ランクアップ！"
+                    "⬆️ ランクアップ！ルーキー！"
 
                 )
 
@@ -1325,7 +1455,7 @@ if game.game_over():
 
                 st.success(
 
-                    "⬆️ ランクアップ！"
+                    "⬆️ ランクアップ！プロ！"
 
                 )
 
@@ -1344,7 +1474,7 @@ if game.game_over():
 
                 st.success(
 
-                    "⬆️ ランクアップ！"
+                    "⬆️ ランクアップ！マスター！"
 
                 )
 
@@ -1363,7 +1493,7 @@ if game.game_over():
 
                 st.success(
 
-                    "⬆️ ランクアップ！"
+                    "⬆️ ランクアップ！オセロ名人！"
 
                 )
 
@@ -1655,10 +1785,10 @@ for i, rank in enumerate(RANKS):
 st.write("## 📈 ランクアップ条件")
 
 
-st.write("レベル1→ レベル2：5勝")
+st.write("初心者 → ルーキー：5勝")
 
-st.write("レベル2 → レベル3：15勝")
+st.write("ルーキー → プロ：15勝")
 
-st.write("レベル3 → レベル4：30勝")
+st.write("プロ → マスター：30勝")
 
-st.write("レベル4 → レベル5：50勝")
+st.write("マスター → オセロ名人：50勝")
