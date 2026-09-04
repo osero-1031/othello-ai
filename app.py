@@ -1,5 +1,3 @@
-バックアップ　9月4日
-
 import streamlit as st
 import copy
 import time
